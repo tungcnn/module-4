@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel='stylesheet' href='/webjars/bootstrap/4.6.0-1/css/bootstrap.min.css'>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <p style="width: 100%; text-align: center">Picture of the day</p>
+    </div>
+    <div class="row">
+        <img id="img-of-the-day" style="margin-left: auto;margin-right: auto">
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form th:object="${feedBack}" th:action="@{/create}" method="post">
+                <div class="form-group">
+                    <label>Score</label>
+                    <input th:field="*{score}" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <input th:field="*{author}" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Feed Back</label>
+                    <input th:field="*{feedBack}" type="text" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <ul style="list-style-type: none">
+                <li th:each="fb : ${feedBacks}">
+                    Score: <span th:text="${fb.score}"></span>  Comment: <span th:text="${fb.feedBack}"></span>
+                    <br>
+                    Author: <span th:text="${fb.author}"></span>
+                    <br>
+                    <span th:text="${fb.numberOfLike}"></span> likes
+                    <a class="btn btn-primary">Likes</a>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let query = 'https://api.nasa.gov/planetary/apod?api_key=pxhvTXwFAulGDGKoRCqw1fPr2xU9NBxWeNqTrTz6'
+    let request = new XMLHttpRequest();
+    request.open('GET', query);
+    request.onload = function() {
+        if (request.status === 200) {
+            let response = JSON.parse(request.responseText);
+            document.getElementById('img-of-the-day').setAttribute('src', response.url);
+        }
+    };
+    request.send();
+</script>
+</html>
